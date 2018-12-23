@@ -28,6 +28,26 @@ vvc(){
         rm ~/Visual-Vim/session_log/$2.txt
         tmux kill-session -t $2
         echo -e "${YEL}kill VV session $2${NC}"
+    elif [[ ($1 == "help" ) ||  ($1 == "h") ]]; then
+        
+        echo -e "${LCY}Visual-Vim Command list$(tput sgr 0) "
+        echo -e "------------------------${NC}"
+        echo -e "1. ${YEL}vvc list (ls)${NC}"
+        echo -e "${LCY}Shows the currently running VV session list${NC}"
+        echo -e "ex) ${NC} \$ vvc ls ${NC}"
+        echo ""
+
+        echo -e "2. ${YEL}vvc attach (a)${NC}"
+        echo -e "${LCY}Reactivate the VV session${NC}"
+        echo -e "vvc a \$Session_number"
+        echo -e "ex) ${NC} \$ vvc a 1${NC}"
+        echo ""
+
+        echo -e "3. ${YEL}vvc kill (k)${NC}"
+        echo -e "${LCY}Remove the running VV session${NC}"
+        echo -e "vvc k \$Session_number"
+        echo -e "ex) ${NC} \$ vvc k 1${NC}"
+        
     fi
 }
 vv(){
