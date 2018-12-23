@@ -1,6 +1,15 @@
 export TERM="xterm-256color"
 
 vv(){
+ if [[ $@ == "ls" ]]; then
+    echo "Visual-Vim Session list "
+    session_list_txt=$(ls ~/Visual-Vim/session_log/)
+    session_list=$(echo "$session_list_txt" | cut -d "." -f1)
+    for i in $session_list ; do
+        echo "Session number $i"
+    done
+    return 1
+ fi
  local file_name=$@
  screen_id=$(tty)
  sc=$(echo "$screen_id" | cut -c 10-14)
@@ -53,6 +62,7 @@ vq(){
     t_id=$("tty")
     data=$(cat ~/Visual-Vim/session_log/* | grep "$t_id")
     s_id=$(echo "$data" | cut -d "/" -f1)
-    rm ~/Visual-Vim/session_log/$s_id.txt
+    s_file=$s_id.txt
+    rm ~/Visual-Vim/session_log/$s_file
     tmux kill-session -t $s_id
 }
