@@ -1,53 +1,66 @@
 export TERM="xterm-256color"
 
+vvc(){
+    if [[ ($1 == "ls" ) ||  ($1 == "list") ]]; then
+        echo "Visual-Vim Session list "
+        echo "------------------------"
+        session_list_txt=$(ls ~/Visual-Vim/session_log/)
+        session_list=$(echo "$session_list_txt" | cut -d "." -f1)
+
+        for i in $session_list ; do
+            session_item=$(cat ~/Visual-Vim/session_log/$i.txt | cut -d "!" -f2 | head -1)
+            echo "Session number $i"
+            echo "VV component is $session_item"
+            echo ""
+        done
+        return 1
+    elif [[ ($1 == "attach" ) ||  ($1 == "a") ]]; then
+        tmux attach -t $2
+    elif [[ ($1 == "kill" ) ||  ($1 == "k") ]]; then
+        rm ~/Visual-Vim/session_log/$2.txt
+        tmux kill-session -t $2
+        echo "kill VV session $2"
+    fi
+}
 vv(){
- if [[ $@ == "ls" ]]; then
-    echo "Visual-Vim Session list "
-    session_list_txt=$(ls ~/Visual-Vim/session_log/)
-    session_list=$(echo "$session_list_txt" | cut -d "." -f1)
-    for i in $session_list ; do
-        echo "Session number $i"
-    done
-    return 1
- fi
- local file_name=$@
- screen_id=$(tty)
- sc=$(echo "$screen_id" | cut -c 10-14)
+    local file_name=$@
+    screen_id=$(tty)
+    sc=$(echo "$screen_id" | cut -c 10-14)
 
- #create session
-if [ -e ~/Visual-Vim/session_log/$sc.txt ]
-then
-    echo " $sc screen exist error!!"
-else
-    touch ~/Visual-Vim/session_log/$sc.txt
+    #create session
+    if [ -e ~/Visual-Vim/session_log/$sc.txt ]
+    then
+        echo " $sc screen exist error!!"
+    else
+        touch ~/Visual-Vim/session_log/$sc.txt
 
-    tmux new-session -s $sc -n '$sc' -d
-    tmux splitw -h -p 5 -t 0
-    tmux splitw -v -p 50 -t 0
-    tmux splitw -h -p 50 -t 2
-    tmux resize-pane -t 2 -y 11
-    tmux resize-pane -t 2 -x 115
+        tmux new-session -s $sc -n '$sc' -d
+        tmux splitw -h -p 5 -t 0
+        tmux splitw -v -p 50 -t 0
+        tmux splitw -h -p 50 -t 2
+        tmux resize-pane -t 2 -y 11
+        tmux resize-pane -t 2 -x 115
 
-    echo "$sc$screen_id" >> ~/Visual-Vim/session_log/$sc.txt
-    
-    # tmux send-keys -t 0 "data=$sc_term$("tty")" C-j
-    
-    tmux send-keys -t 0 "write_id $sc" C-j
-    tmux send-keys -t 1 "write_id $sc" C-j
-    tmux send-keys -t 2 "write_id $sc" C-j
-    tmux send-keys -t 3 "write_id $sc" C-j
-    
-    tmux send-keys -t 1 "clear" C-j
-    tmux send-keys -t 2 "clear" C-j
-    
-    tmux send-keys -t 3 "htop" C-j
-    tmux send-keys -t 0 "vi $file_name" C-j
+        echo "$sc$screen_id ! $1 !" >> ~/Visual-Vim/session_log/$sc.txt
 
-    tmux select-pane -t 2
-    tmux select-pane -t 0
+        # tmux send-keys -t 0 "data=$sc_term$("tty")" C-j
 
-    tmux attach -t $sc
- fi
+        tmux send-keys -t 0 "write_id $sc" C-j
+        tmux send-keys -t 1 "write_id $sc" C-j
+        tmux send-keys -t 2 "write_id $sc" C-j
+        tmux send-keys -t 3 "write_id $sc" C-j
+
+        tmux send-keys -t 1 "clear" C-j
+        tmux send-keys -t 2 "clear" C-j
+
+        tmux send-keys -t 3 "htop" C-j
+        tmux send-keys -t 0 "vi $file_name" C-j
+
+        tmux select-pane -t 2
+        tmux select-pane -t 0
+
+        tmux attach -t $sc
+    fi
 }
 
 write_id(){
@@ -65,4 +78,8 @@ vq(){
     s_file=$s_id.txt
     rm ~/Visual-Vim/session_log/$s_file
     tmux kill-session -t $s_id
+}
+
+vd(){
+    tmux detach
 }
