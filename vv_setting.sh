@@ -11,14 +11,14 @@ LCY='\033[1;36m'
 vvc(){
     if [[ ($1 == "ls" ) ||  ($1 == "list") ]]; then
         echo -e "${LCY}Visual-Vim Session list$(tput sgr 0) "
-        echo -e "------------------------"
+        echo -e "------------------------${NC}"
         session_list_txt=$(ls ~/Visual-Vim/session_log/)
         session_list=$(echo "$session_list_txt" | cut -d "." -f1)
 
         for i in $session_list ; do
             session_item=$(cat ~/Visual-Vim/session_log/$i.txt | cut -d "!" -f2 | head -1)
             echo -e "${YEL}Session number ${RED}$i${NC}"
-            echo -e "${LCY}VV component :${CY}$session_item"
+            echo -e "${LCY}VV component :${CY}$session_item${NC}"
             echo ""
         done
         return 1
@@ -27,7 +27,7 @@ vvc(){
     elif [[ ($1 == "kill" ) ||  ($1 == "k") ]]; then
         rm ~/Visual-Vim/session_log/$2.txt
         tmux kill-session -t $2
-        echo -e "${YEL}kill VV session $2"
+        echo -e "${YEL}kill VV session $2${NC}"
     fi
 }
 vv(){
