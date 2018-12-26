@@ -47,7 +47,7 @@ vvc(){
         echo -e "${LCY}Remove the running VV session${NC}"
         echo -e "vvc k \$Session_number"
         echo -e "ex) ${NC} \$ vvc k 1${NC}"
-        
+
     fi
 }
 vv(){
@@ -63,15 +63,16 @@ vv(){
         touch ~/Visual-Vim/session_log/$sc.txt
 
         tmux new-session -s $sc -n '$sc' -d
-        tmux splitw -h -p 5 -t 0
+        # gdb console size
+        tmux splitw -h -p 1 -t 0
         tmux splitw -v -p 50 -t 0
         tmux splitw -h -p 50 -t 2
         # Terminal , Board rate
         #(2560 X 1440) => 18 170
         #(1920 X 1080) => 11 115
-        tmux resize-pane -t 2 -y 11
+        tmux resize-pane -t 2 -y 18
         # Htop Terminal rate
-        tmux resize-pane -t 2 -x 115
+        tmux resize-pane -t 2 -x 170
 
         echo "$sc$screen_id ! $@ !" >> ~/Visual-Vim/session_log/$sc.txt
 
@@ -117,49 +118,59 @@ vd(){
 }
 
 gd(){
- t_id=$("tty")
- target=$(cat ~/Visual-Vim/session_log/* | grep "$t_id")
- sc=$(echo "$target" | cut -d "/" -f1)
- tmux select-pane -t 1
- local file_name=$@
- tmux resize-pane -t 1 -x 115
- tmux splitw -v -p 30 -t 1 #2
- tmux select-pane -t 1
- tmux splitw -v -p 70 -t 1 #6
- 
- tmux select-pane -t 2
- tmux splitw -h -p 50 -t 2 #3
- tmux select-pane -t 3
- tmux splitw -v -p 25 -t 3 #4
- tmux select-pane -t 3
- tmux splitw -v -p 25 -t 3 #5
+    if [[ ($1 == "rm" ) ||  ($1 == "remove") ]]; then
+        tmux send-keys -t 1 "exit" C-j
+        tmux send-keys -t 2 "exit" C-j
+        tmux send-keys -t 3 "exit" C-j
+        tmux send-keys -t 4 "exit" C-j
+        tmux send-keys -t 1 "exit" C-j
+        tmux send-keys -t 1 "exit" C-j
+        tmux send-keys -t 1 "quit" C-j
+        tmux resize-pane -t 1 -x 5
+        return 1
+    fi
+    target=$(cat ~/Visual-Vim/session_log/* | grep "$t_id")
+    sc=$(echo "$target" | cut -d "/" -f1)
+    tmux select-pane -t 1
+    local file_name=$@
+    tmux resize-pane -t 1 -x 115
+    tmux splitw -v -p 30 -t 1 #2
+    tmux select-pane -t 1
+    tmux splitw -v -p 70 -t 1 #6
 
- tmux select-pane -t 6
- tmux splitw -h -p 47 -t 6 #7
+    tmux select-pane -t 2
+    tmux splitw -h -p 50 -t 2 #3
+    tmux select-pane -t 3
+    tmux splitw -v -p 25 -t 3 #4
+    tmux select-pane -t 3
+    tmux splitw -v -p 25 -t 3 #5
 
- #source pain
- tmux send-keys -t 1 "write_id $sc" C-j
- tmux send-keys -t 1 "gd_ta" C-j
- 
- tmux send-keys -t 2 "write_id $sc" C-j
- tmux send-keys -t 2 "gd_tb" C-j
- 
- tmux send-keys -t 3 "write_id $sc" C-j
- tmux send-keys -t 3 "gd_tc" C-j
- 
- tmux send-keys -t 4 "write_id $sc" C-j
- tmux send-keys -t 4 "gd_td" C-j
- 
- tmux send-keys -t 5 "write_id $sc" C-j
- tmux send-keys -t 5 "gd_te" C-j
- 
- tmux send-keys -t 7 "write_id $sc" C-j
- tmux send-keys -t 7 "gd_tf" C-j
- 
- tmux send-keys -t 6 "write_id $sc" C-j
- tmux send-keys -t 6 "gdb $file_name" C-j
+    tmux select-pane -t 6
+    tmux splitw -h -p 47 -t 6 #7
 
- tmux select-pane -t 6
+    #source pain
+    tmux send-keys -t 1 "write_id $sc" C-j
+    tmux send-keys -t 1 "gd_ta" C-j
+
+    tmux send-keys -t 2 "write_id $sc" C-j
+    tmux send-keys -t 2 "gd_tb" C-j
+
+    tmux send-keys -t 3 "write_id $sc" C-j
+    tmux send-keys -t 3 "gd_tc" C-j
+
+    tmux send-keys -t 4 "write_id $sc" C-j
+    tmux send-keys -t 4 "gd_td" C-j
+
+    tmux send-keys -t 5 "write_id $sc" C-j
+    tmux send-keys -t 5 "gd_te" C-j
+
+    tmux send-keys -t 7 "write_id $sc" C-j
+    tmux send-keys -t 7 "gd_tf" C-j
+
+    tmux send-keys -t 6 "write_id $sc" C-j
+    tmux send-keys -t 6 "gdb $file_name" C-j
+
+    tmux select-pane -t 6
 }
 
 gd_ta(){
