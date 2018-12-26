@@ -1,0 +1,6 @@
+dashboard source -output /dev/pts/21
+dashboard watch_points -output /dev/pts/26
+dashboard local_variables -output /dev/pts/25
+dashboard threads -output /dev/pts/28
+dashboard stack -output /dev/pts/27
+dashboard assembly -output /dev/pts/29

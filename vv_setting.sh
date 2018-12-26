@@ -66,7 +66,9 @@ vv(){
         tmux splitw -h -p 5 -t 0
         tmux splitw -v -p 50 -t 0
         tmux splitw -h -p 50 -t 2
+        # Terminal , Board rate (2560 X 1440) => 15 170
         tmux resize-pane -t 2 -y 11
+        # Htop Terminal rate
         tmux resize-pane -t 2 -x 115
 
         echo "$sc$screen_id ! $@ !" >> ~/Visual-Vim/session_log/$sc.txt
@@ -110,4 +112,81 @@ vq(){
 
 vd(){
     tmux detach
+}
+
+gd(){
+ t_id=$("tty")
+ target=$(cat ~/Visual-Vim/session_log/* | grep "$t_id")
+ sc=$(echo "$target" | cut -d "/" -f1)
+ tmux select-pane -t 1
+ local file_name=$@
+ tmux resize-pane -t 1 -x 115
+ tmux splitw -v -p 30 -t 1 #2
+ tmux select-pane -t 1
+ tmux splitw -v -p 70 -t 1 #6
+ 
+ tmux select-pane -t 2
+ tmux splitw -h -p 50 -t 2 #3
+ tmux select-pane -t 3
+ tmux splitw -v -p 25 -t 3 #4
+ tmux select-pane -t 3
+ tmux splitw -v -p 25 -t 3 #5
+
+ tmux select-pane -t 6
+ tmux splitw -h -p 47 -t 6 #7
+
+ #source pain
+ tmux send-keys -t 1 "write_id $sc" C-j
+ tmux send-keys -t 1 "TA" C-j
+ 
+ tmux send-keys -t 2 "write_id $sc" C-j
+ tmux send-keys -t 2 "TB" C-j
+ 
+ tmux send-keys -t 3 "write_id $sc" C-j
+ tmux send-keys -t 3 "TC" C-j
+ 
+ tmux send-keys -t 4 "write_id $sc" C-j
+ tmux send-keys -t 4 "TD" C-j
+ 
+ tmux send-keys -t 5 "write_id $sc" C-j
+ tmux send-keys -t 5 "TE" C-j
+ 
+ tmux send-keys -t 7 "write_id $sc" C-j
+ tmux send-keys -t 7 "TF" C-j
+ 
+ tmux send-keys -t 6 "write_id $sc" C-j
+ tmux send-keys -t 6 "gdb $file_name" C-j
+
+ tmux select-pane -t 6
+}
+
+TA(){
+    a=$("tty")
+    echo "dashboard source -output $a" > ~/Visual-Vim/gdb_log/log.txt
+    clear
+}
+TB(){
+    b=$("tty")
+    echo "dashboard local_variables -output $b" >> ~/Visual-Vim/gdb_log/log.txt
+    clear
+}
+TC(){
+    c=$("tty")
+    echo "dashboard watch_points -output $c" >> ~/Visual-Vim/gdb_log/log.txt
+    clear
+}
+TD(){
+    d=$("tty")
+    echo "dashboard threads -output $d" >> ~/Visual-Vim/gdb_log/log.txt
+    clear
+}
+TE(){
+    e=$("tty")
+    echo "dashboard stack -output $e" >> ~/Visual-Vim/gdb_log/log.txt
+    clear
+}
+TF(){
+    f=$("tty")
+    echo "dashboard assembly -output $f" >> ~/Visual-Vim/gdb_log/log.txt
+    clear
 }
