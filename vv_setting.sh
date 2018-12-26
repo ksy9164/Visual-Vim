@@ -66,7 +66,9 @@ vv(){
         tmux splitw -h -p 5 -t 0
         tmux splitw -v -p 50 -t 0
         tmux splitw -h -p 50 -t 2
-        # Terminal , Board rate (2560 X 1440) => 15 170
+        # Terminal , Board rate
+        #(2560 X 1440) => 18 170
+        #(1920 X 1080) => 11 115
         tmux resize-pane -t 2 -y 11
         # Htop Terminal rate
         tmux resize-pane -t 2 -x 115
@@ -137,22 +139,22 @@ gd(){
 
  #source pain
  tmux send-keys -t 1 "write_id $sc" C-j
- tmux send-keys -t 1 "TA" C-j
+ tmux send-keys -t 1 "gd_ta" C-j
  
  tmux send-keys -t 2 "write_id $sc" C-j
- tmux send-keys -t 2 "TB" C-j
+ tmux send-keys -t 2 "gd_tb" C-j
  
  tmux send-keys -t 3 "write_id $sc" C-j
- tmux send-keys -t 3 "TC" C-j
+ tmux send-keys -t 3 "gd_tc" C-j
  
  tmux send-keys -t 4 "write_id $sc" C-j
- tmux send-keys -t 4 "TD" C-j
+ tmux send-keys -t 4 "gd_td" C-j
  
  tmux send-keys -t 5 "write_id $sc" C-j
- tmux send-keys -t 5 "TE" C-j
+ tmux send-keys -t 5 "gd_te" C-j
  
  tmux send-keys -t 7 "write_id $sc" C-j
- tmux send-keys -t 7 "TF" C-j
+ tmux send-keys -t 7 "gd_tf" C-j
  
  tmux send-keys -t 6 "write_id $sc" C-j
  tmux send-keys -t 6 "gdb $file_name" C-j
@@ -160,32 +162,32 @@ gd(){
  tmux select-pane -t 6
 }
 
-TA(){
+gd_ta(){
     a=$("tty")
     echo "dashboard source -output $a" > ~/Visual-Vim/gdb_log/log.txt
     clear
 }
-TB(){
+gd_tb(){
     b=$("tty")
     echo "dashboard local_variables -output $b" >> ~/Visual-Vim/gdb_log/log.txt
     clear
 }
-TC(){
+gd_tc(){
     c=$("tty")
     echo "dashboard watch_points -output $c" >> ~/Visual-Vim/gdb_log/log.txt
     clear
 }
-TD(){
+gd_td(){
     d=$("tty")
     echo "dashboard threads -output $d" >> ~/Visual-Vim/gdb_log/log.txt
     clear
 }
-TE(){
+gd_te(){
     e=$("tty")
     echo "dashboard stack -output $e" >> ~/Visual-Vim/gdb_log/log.txt
     clear
 }
-TF(){
+gd_tf(){
     f=$("tty")
     echo "dashboard assembly -output $f" >> ~/Visual-Vim/gdb_log/log.txt
     clear
