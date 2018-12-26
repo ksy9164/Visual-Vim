@@ -70,9 +70,9 @@ vv(){
         # Terminal , Board rate
         #(2560 X 1440) => 18 170
         #(1920 X 1080) => 11 115
-        tmux resize-pane -t 2 -y 18
+        tmux resize-pane -t 2 -y 11
         # Htop Terminal rate
-        tmux resize-pane -t 2 -x 170
+        tmux resize-pane -t 2 -x 115
 
         echo "$sc$screen_id ! $@ !" >> ~/Visual-Vim/session_log/$sc.txt
 
@@ -127,6 +127,7 @@ gd(){
         tmux send-keys -t 1 "exit" C-j
         tmux send-keys -t 1 "quit" C-j
         tmux resize-pane -t 1 -x 5
+        tmux select-pane -t 2
         return 1
     fi
     target=$(cat ~/Visual-Vim/session_log/* | grep "$t_id")
