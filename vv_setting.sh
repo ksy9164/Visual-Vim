@@ -47,7 +47,6 @@ vvc(){
         echo -e "${LCY}Remove the running VV session${NC}"
         echo -e "vvc k \$Session_number"
         echo -e "ex) ${NC} \$ vvc k 1${NC}"
-
     fi
 }
 vv(){
