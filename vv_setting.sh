@@ -67,12 +67,12 @@ vv(){
         tmux splitw -h -p 1 -t 0
         tmux splitw -v -p 50 -t 0
         tmux splitw -h -p 50 -t 2
-        # Terminal , Board rate
-        #(2560 X 1440) => 18 170
-        #(1920 X 1080) => 11 115
-        tmux resize-pane -t 2 -y 11
-        # Htop Terminal rate
-        tmux resize-pane -t 2 -x 115
+        
+        #read rate file
+        source ~/Visual-Vim/ScreenRate.sh
+        
+        tmux resize-pane -t 2 -y $r1
+        tmux resize-pane -t 2 -x $r2
 
         echo "$sc$screen_id ! $@ !" >> ~/Visual-Vim/session_log/$sc.txt
 
@@ -126,6 +126,7 @@ gd(){
         tmux send-keys -t 1 "exit" C-j
         tmux send-keys -t 1 "exit" C-j
         tmux send-keys -t 1 "quit" C-j
+        tmux send-keys -t 1 "clear" C-j
         tmux resize-pane -t 1 -x 5
         tmux select-pane -t 2
         return 1
