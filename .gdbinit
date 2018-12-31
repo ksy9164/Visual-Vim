@@ -1392,4 +1392,4 @@ python Dashboard.start()
 # mode: python
 # End:
 file_root=$(tty)
-source ~/Visual-Vim/log/$filr_root
+source ~/Visual-Vim/log/$file_root
