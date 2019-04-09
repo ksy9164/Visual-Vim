@@ -106,3 +106,26 @@ do
     fi
 done
 
+
+# Vim settings
+echo "Do you want to use Visual-Vim's vimrc,Vim-PlugIn settings?? (Y/N)"
+read confirm
+if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
+    cp ~/.vimrc ~/.vimrc_past
+    cp $INSTALL_PATH/util/.vimrc ~
+    install_system_pkg "ctags"
+    install_system_pkg "vim-gnome"
+    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+    sudo vim -c 'PluginInstall' -c 'qa!'
+    echo "Your past ~/.vimrc is moved ~/.vimrc_past"
+fi
+
+# Tmux settings
+echo "Do you want to use Visual-Vim's tmux.conf setting?? (Y/N)"
+read confirm
+if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
+    cp ~/.tmux.conf ~/.tmux.conf_past
+    cp $INSTALL_PATH/util/.tmux.conf ~
+    echo "Your past ~/.tmux.conf is moved ~/.tmux.conf_past"
+fi
+

@@ -300,8 +300,6 @@ Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 "Commenter
 Plugin 'scrooloose/nerdcommenter'
-"Ctags
-Plugin 'universal-ctags/ctags'
 call vundle#end()            " required
 
 filetype plugin indent on    " required
