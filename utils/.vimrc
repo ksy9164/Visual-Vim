@@ -143,18 +143,7 @@ au BufEnter /* call LoadCscope()
 	"NERD Tree Auto open
 	" autocmd VimEnter * NERDTree | wincmd p
 	
-	"NERD Tree and TagList Auto close
-	fun! NoExcitingBuffersLeft()
-	   if tabpagenr("$") == 1 && winnr("$") == 2
-		  let window1 = bufname(winbufnr(1))
-		  let window2 = bufname(winbufnr(2))
-		  if (window1 == t:NERDTreeBufName || window1 == "__Tag_List__") && (window2 == t:NERDTreeBufName || window2 == "__Tag_List__")
-			quit
-			quit
-		  endif
-	   endif
-	endfun
-	au WinEnter * call NoExcitingBuffersLeft()
+	" au WinEnter * call NoExcitingBuffersLeft()
 
 	"auto close only NERD Tree"
 	function! s:CloseIfOnlyControlWinLeft()
