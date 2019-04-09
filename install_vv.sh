@@ -75,16 +75,23 @@ fi
 
 INSTALL_PATH="$(pwd)/Visual-Vim"
 
+if ! type "git" >/dev/null 2>&1; then
+    echo "Git is not available!!"
+    install_script_deps
+    install_system_pkg "git"
+fi
+
 if ! type "tmux" >/dev/null 2>&1; then
     echo "Tmux is not available!!"
     install_script_deps
     install_system_pkg "tmux"
 fi
 
-git clone git@github.com:ksy9164/Visual-Vim.git
+git clone https://github.com/ksy9164/Visual-Vim.git
 
 # make vv_setting.sh
 cd Visual-Vim
+mkdir session_log
 
 echo "VV_INSTALL_PATH=$INSTALL_PATH" > vv_setting.sh
 cat ./src/vv_func.sh >> vv_setting.sh
