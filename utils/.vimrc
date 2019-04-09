@@ -141,7 +141,7 @@ au BufEnter /* call LoadCscope()
 	let NERDTreeWinPos = 'left'
 	nmap <F7> :NERDTreeToggle<CR>
 	"NERD Tree Auto open
-	autocmd VimEnter * NERDTree | wincmd p
+	" autocmd VimEnter * NERDTree | wincmd p
 	
 	"NERD Tree and TagList Auto close
 	fun! NoExcitingBuffersLeft()

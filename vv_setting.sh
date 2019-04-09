@@ -44,9 +44,27 @@ vvc(){
         echo ""
 
         echo -e "3. ${YEL}vvc kill (k)${NC}"
-        echo -e "${LCY}Remove the running VV session${NC}"
+        echo -e "${LCY}Kill the running VV session${NC}"
         echo -e "vvc k \$Session_number"
         echo -e "ex) ${NC} \$ vvc k 1${NC}"
+        echo ""
+
+        echo -e "4. ${YEL}vvc clear (c)${NC}"
+        echo -e "${LCY}Remove and Kill all VV sessions${NC}"
+        echo -e "ex) ${NC} \$ vvc clear${NC}"
+
+    elif [[ ($1 == "clear" ) ||  ($1 == "c") ]]; then
+        session_list_txt=$(ls ~/Visual-Vim/session_log/)
+        session_list=$(echo "$session_list_txt" | cut -d "." -f1)
+        
+        for i in $session_list ; do
+            tmux kill-session -t $i
+        done
+
+        rm ~/Visual-Vim/session_log/*
+
+    else
+        echo "Unknown Command!!"
     fi
 }
 vv(){
@@ -63,15 +81,14 @@ vv(){
 
         tmux new-session -s $sc -n '$sc' -d
         # gdb console size
-        tmux splitw -h -p 1 -t 0
         tmux splitw -v -p 50 -t 0
-        tmux splitw -h -p 50 -t 2
+        tmux splitw -h -p 50 -t 1
         
         #read rate file
         source ~/Visual-Vim/ScreenRate.sh
         
-        tmux resize-pane -t 2 -y $r1
-        tmux resize-pane -t 2 -x $r2
+        tmux resize-pane -t 1 -y $r1
+        tmux resize-pane -t 1 -x $r2
 
         echo "$sc$screen_id ! $@ !" >> ~/Visual-Vim/session_log/$sc.txt
 
@@ -80,15 +97,13 @@ vv(){
         tmux send-keys -t 0 "write_id $sc" C-j
         tmux send-keys -t 1 "write_id $sc" C-j
         tmux send-keys -t 2 "write_id $sc" C-j
-        tmux send-keys -t 3 "write_id $sc" C-j
 
         tmux send-keys -t 1 "clear" C-j
-        tmux send-keys -t 2 "clear" C-j
 
-        tmux send-keys -t 3 "htop" C-j
+        tmux send-keys -t 2 "htop" C-j
         tmux send-keys -t 0 "vi $file_name" C-j
 
-        tmux select-pane -t 2
+        tmux select-pane -t 1
         tmux select-pane -t 0
 
         tmux attach -t $sc
@@ -116,91 +131,3 @@ vd(){
     tmux detach
 }
 
-gd(){
-    if [[ ($1 == "rm" ) ||  ($1 == "remove") ]]; then
-        tmux send-keys -t 1 "exit" C-j
-        tmux send-keys -t 2 "exit" C-j
-        tmux send-keys -t 3 "exit" C-j
-        tmux send-keys -t 4 "exit" C-j
-        tmux send-keys -t 1 "exit" C-j
-        tmux send-keys -t 1 "exit" C-j
-        tmux send-keys -t 1 "quit" C-j
-        tmux send-keys -t 1 "clear" C-j
-        tmux resize-pane -t 1 -x 5
-        tmux select-pane -t 2
-        return 1
-    fi
-    target=$(cat ~/Visual-Vim/session_log/* | grep "$t_id")
-    sc=$(echo "$target" | cut -d "/" -f1)
-    tmux select-pane -t 1
-    local file_name=$@
-    tmux resize-pane -t 1 -x 115
-    tmux splitw -v -p 30 -t 1 #2
-    tmux select-pane -t 1
-    tmux splitw -v -p 70 -t 1 #6
-
-    tmux select-pane -t 2
-    tmux splitw -h -p 50 -t 2 #3
-    tmux select-pane -t 3
-    tmux splitw -v -p 25 -t 3 #4
-    tmux select-pane -t 3
-    tmux splitw -v -p 25 -t 3 #5
-
-    tmux select-pane -t 6
-    tmux splitw -h -p 47 -t 6 #7
-
-    #source pain
-    tmux send-keys -t 1 "write_id $sc" C-j
-    tmux send-keys -t 1 "gd_ta" C-j
-
-    tmux send-keys -t 2 "write_id $sc" C-j
-    tmux send-keys -t 2 "gd_tb" C-j
-
-    tmux send-keys -t 3 "write_id $sc" C-j
-    tmux send-keys -t 3 "gd_tc" C-j
-
-    tmux send-keys -t 4 "write_id $sc" C-j
-    tmux send-keys -t 4 "gd_td" C-j
-
-    tmux send-keys -t 5 "write_id $sc" C-j
-    tmux send-keys -t 5 "gd_te" C-j
-
-    tmux send-keys -t 7 "write_id $sc" C-j
-    tmux send-keys -t 7 "gd_tf" C-j
-
-    tmux send-keys -t 6 "write_id $sc" C-j
-    tmux send-keys -t 6 "gdb $file_name" C-j
-
-    tmux select-pane -t 6
-}
-
-gd_ta(){
-    a=$("tty")
-    echo "dashboard source -output $a" > ~/Visual-Vim/gdb_log/log.txt
-    clear
-}
-gd_tb(){
-    b=$("tty")
-    echo "dashboard local_variables -output $b" >> ~/Visual-Vim/gdb_log/log.txt
-    clear
-}
-gd_tc(){
-    c=$("tty")
-    echo "dashboard watch_points -output $c" >> ~/Visual-Vim/gdb_log/log.txt
-    clear
-}
-gd_td(){
-    d=$("tty")
-    echo "dashboard threads -output $d" >> ~/Visual-Vim/gdb_log/log.txt
-    clear
-}
-gd_te(){
-    e=$("tty")
-    echo "dashboard stack -output $e" >> ~/Visual-Vim/gdb_log/log.txt
-    clear
-}
-gd_tf(){
-    f=$("tty")
-    echo "dashboard assembly -output $f" >> ~/Visual-Vim/gdb_log/log.txt
-    clear
-}
