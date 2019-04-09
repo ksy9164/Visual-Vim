@@ -1,8 +1,8 @@
 # Visual-Vim
 
-#### Visaul-Vim is Tmux utility for Vim user who want to use Vim like an IDE !!  
+### Visaul-Vim is Tmux utility for Vim user who want to use Vim like an IDE !!  
 -----------------------------------------
-
+![Visaul-Vim](./img/vv_image.png)
 # How to Install Visual-Vim?  
 
 ````sh    
@@ -40,8 +40,7 @@ $ vd
 
 ### If you want to control your Visual-Vim sessions you can use 'vvc' command   
   
-Visual-Vim Command list  
-
+  
 #### 1) vvc list ( ls )   
 Shows the currently running VV session list 
 ````sh
@@ -52,20 +51,21 @@ $ vvc ls
 Reactivate the VV session   
 vvc a $Session_number (you can use 'vvc ls' to get session_number)   
 ````sh  
-$ vvc a 1  
+$ vvc a $Session_number  
+ex) $ vvc a 1  
 ````  
 
 #### 3) vvc kill ( k )  
 Kill the running VV session  
-vvc k $Session_number  
 ````sh  
-vvc k 1  
+$ vvc k $Session_number  
+ex) $ vvc k 1  
 ````
 
 #### 4) vvc clear ( c )  
 Remove and Kill all VV sessions  
 ````sh  
-vvc clear 
+$ vvc clear 
 ````  
 
 #### 5) vvc help ( h )  
