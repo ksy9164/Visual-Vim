@@ -12,11 +12,11 @@ vvc(){
     if [[ ($1 == "ls" ) ||  ($1 == "list") ]]; then
         echo -e "${LCY}Visual-Vim Session list$(tput sgr 0) "
         echo -e "------------------------${NC}"
-        session_list_txt=$(ls ~/Visual-Vim/session_log/)
+        session_list_txt=$(ls $VV_INSTALL_PATH/session_log/)
         session_list=$(echo "$session_list_txt" | cut -d "." -f1)
 
         for i in $session_list ; do
-            session_item=$(cat ~/Visual-Vim/session_log/$i.txt | cut -d "!" -f2 | head -1)
+            session_item=$(cat $VV_INSTALL_PATH/session_log/$i.txt | cut -d "!" -f2 | head -1)
             echo -e "${YEL}Session number ${RED}$i${NC}"
             echo -e "${LCY}VV component :${CY}$session_item${NC}"
             echo ""
@@ -25,7 +25,7 @@ vvc(){
     elif [[ ($1 == "attach" ) ||  ($1 == "a") ]]; then
         tmux attach -t $2
     elif [[ ($1 == "kill" ) ||  ($1 == "k") ]]; then
-        rm ~/Visual-Vim/session_log/$2.txt
+        rm $VV_INSTALL_PATH/session_log/$2.txt
         tmux kill-session -t $2
         echo -e "${YEL}kill VV session $2${NC}"
     elif [[ ($1 == "help" ) ||  ($1 == "h") ]]; then
@@ -54,14 +54,14 @@ vvc(){
         echo -e "ex) ${NC} \$ vvc clear${NC}"
 
     elif [[ ($1 == "clear" ) ||  ($1 == "c") ]]; then
-        session_list_txt=$(ls ~/Visual-Vim/session_log/)
+        session_list_txt=$(ls $VV_INSTALL_PATH/session_log/)
         session_list=$(echo "$session_list_txt" | cut -d "." -f1)
         
         for i in $session_list ; do
             tmux kill-session -t $i
         done
 
-        rm ~/Visual-Vim/session_log/*
+        rm $VV_INSTALL_PATH/session_log/*
 
     else
         echo "Unknown Command!!"
@@ -73,11 +73,11 @@ vv(){
     sc=$(echo "$screen_id" | cut -c 10-14)
 
     #create session
-    if [ -e ~/Visual-Vim/session_log/$sc.txt ]
+    if [ -e $VV_INSTALL_PATH/session_log/$sc.txt ]
     then
         echo -e "${RED}$sc screen exist error!!"
     else
-        touch ~/Visual-Vim/session_log/$sc.txt
+        touch $VV_INSTALL_PATH/session_log/$sc.txt
 
         tmux new-session -s $sc -n '$sc' -d
         # gdb console size
@@ -85,12 +85,12 @@ vv(){
         tmux splitw -h -p 50 -t 1
         
         #read rate file
-        source ~/Visual-Vim/ScreenRate.sh
+        source $VV_INSTALL_PATH/src/ScreenRate.sh
         
         tmux resize-pane -t 1 -y $r1
         tmux resize-pane -t 1 -x $r2
 
-        echo "$sc$screen_id ! $@ !" >> ~/Visual-Vim/session_log/$sc.txt
+        echo "$sc$screen_id ! $@ !" >> $VV_INSTALL_PATH/session_log/$sc.txt
 
         # tmux send-keys -t 0 "data=$sc_term$("tty")" C-j
 
@@ -115,15 +115,15 @@ write_id(){
     b=$1
     s_id=$(echo "$b" | cut -d "C" -f1)
     data="$s_id$t_id"
-    echo "$data" >> ~/Visual-Vim/session_log/$s_id.txt
+    echo "$data" >> $VV_INSTALL_PATH/session_log/$s_id.txt
 }
 
 vq(){
     t_id=$("tty")
-    data=$(cat ~/Visual-Vim/session_log/* | grep "$t_id")
+    data=$(cat $VV_INSTALL_PATH/session_log/* | grep "$t_id")
     s_id=$(echo "$data" | cut -d "/" -f1)
     s_file=$s_id.txt
-    rm ~/Visual-Vim/session_log/$s_file
+    rm $VV_INSTALL_PATH/session_log/$s_file
     tmux kill-session -t $s_id
 }
 
