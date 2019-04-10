@@ -15,45 +15,6 @@ LWHITE="\033[1;37m"
 LG="\033[0;37m"
 NC="\033[0m"
 
-
-install_script_deps() {
-  case $DISTRO in
-  Debian)
-    $sudo apt-get update
-    $sudo apt-get install -y git
-    ;;
-  RedHat)
-    $sudo yum clean expire-cache  # next yum invocation will update package metadata cache
-    $sudo yum install -y git
-    ;;
-  Darwin)
-    if ! type "brew" >/dev/null 2>&1; then
-      show_error "brew is not available!"
-      show_info "Sorry, we only support auto-install on macOS using Homebrew. Please install it and try again."
-      exit 1
-    fi
-    brew update
-    # Having Homebrew means that the user already has git.
-    ;;
-  esac
-}
-
-install_system_pkg() {
-  # accepts three args: Debian-style name, RedHat-style name, and Homebrew-style name
-  case $DISTRO in
-  Debian)
-    $sudo apt-get install -y $1
-    ;;
-  RedHat)
-    $sudo yum install -y $2
-    ;;
-  Darwin)
-    brew bundle --file=- <<EOS
-brew "$3"
-EOS
-  esac
-}
-
 KNOWN_DISTRO="(Debian|Ubuntu|RedHat|CentOS|openSUSE|Amazon|Arista|SUSE)"
 DISTRO=$(lsb_release -d 2>/dev/null | grep -Eo $KNOWN_DISTRO  || grep -Eo $KNOWN_DISTRO /etc/issue 2>/dev/null || uname -s)
 
@@ -73,20 +34,62 @@ else
   exit 1
 fi
 
+install_script_deps() {
+  case $DISTRO in
+  Debian)
+    sudo apt-get update
+    sudo apt-get install -y git
+    ;;
+  RedHat)
+    sudo yum clean expire-cache  # next yum invocation will update package metadata cache
+    sudo yum install -y git
+    ;;
+  Darwin)
+    if ! type "brew" >/dev/null 2>&1; then
+      echo "brew is not available!"
+      echo "Sorry, we only support auto-install on macOS using Homebrew. Please install it and try again."
+      exit 1
+    fi
+    brew update
+    # Having Homebrew means that the user already has git.
+    ;;
+  esac
+}
+
+install_system_pkg() {
+  # accepts three args: Debian-style name, RedHat-style name, and Homebrew-style name
+  case $DISTRO in
+  Debian)
+    sudo apt-get install -y $1
+    echo "sudo apt-get install -y $1"
+    ;;
+  RedHat)
+    sudo yum install -y $2
+    ;;
+  Darwin)
+    brew bundle --file=- <<EOS
+brew "$3"
+EOS
+  esac
+}
+
 INSTALL_PATH="$(pwd)/Visual-Vim"
 
-if ! type "git" >/dev/null 2>&1; then
-    echo "Git is not available!!"
-    install_script_deps
-    install_system_pkg "git"
-fi
+install_script_deps
 
+# Install Tmux
 if ! type "tmux" >/dev/null 2>&1; then
     echo "Tmux is not available!!"
-    install_script_deps
     install_system_pkg "tmux"
 fi
 
+# Install Htop
+if ! type "htop" >/dev/null 2>&1; then
+    echo "Htop is not available!!"
+    install_system_pkg "htop"
+fi
+
+# Download Visual-Vim
 git clone https://github.com/ksy9164/Visual-Vim.git
 
 # make vv_setting.sh
@@ -106,13 +109,12 @@ do
     fi
 done
 
-
 # Vim settings
 echo "Do you want to use Visual-Vim's vimrc,Vim-PlugIn settings?? (Y/N)"
 read confirm
 if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
     cp ~/.vimrc ~/.vimrc_past
-    cp $INSTALL_PATH/util/.vimrc ~
+    cp $INSTALL_PATH/utils/.vimrc ~
     install_system_pkg "ctags"
     install_system_pkg "vim-gnome"
     git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
@@ -125,7 +127,7 @@ echo "Do you want to use Visual-Vim's tmux.conf setting?? (Y/N)"
 read confirm
 if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
     cp ~/.tmux.conf ~/.tmux.conf_past
-    cp $INSTALL_PATH/util/.tmux.conf ~
+    cp $INSTALL_PATH/utils/.tmux.conf ~
     echo "Your past ~/.tmux.conf is moved ~/.tmux.conf_past"
 fi
 
