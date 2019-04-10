@@ -73,6 +73,25 @@ EOS
   esac
 }
 
+make_vv_script() {
+echo "VV_INSTALL_PATH=$INSTALL_PATH" > vv_setting.sh
+  case $DISTRO in
+  Debian)
+    ubuntu_version=$(lsb_release -r)
+    if [[ $ubuntu_version == *"16.04"* ]]; then
+        cat ./src/xenial/vv_func.sh >> vv_setting.sh
+    else
+        cat ./src/bionic/vv_func.sh >> vv_setting.sh
+    fi
+    ;;
+  RedHat)
+        cat ./src/redhat/vv_func.sh >> vv_setting.sh
+    ;;
+  Darwin)
+        cat ./src/darwin/vv_func.sh >> vv_setting.sh
+  esac
+}
+
 INSTALL_PATH="$(pwd)/Visual-Vim"
 
 install_script_deps
@@ -96,8 +115,7 @@ git clone https://github.com/ksy9164/Visual-Vim.git
 cd Visual-Vim
 mkdir session_log
 
-echo "VV_INSTALL_PATH=$INSTALL_PATH" > vv_setting.sh
-cat ./src/vv_func.sh >> vv_setting.sh
+make_vv_script
 
 # profile_file setting
 for PROFILE_FILE in "zshrc" "bashrc" "profile" "bash_profile"
