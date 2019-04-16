@@ -19,7 +19,6 @@ KNOWN_DISTRO="(Debian|Ubuntu|RedHat|CentOS|openSUSE|Amazon|Arista|SUSE)"
 DISTRO=$(lsb_release -d 2>/dev/null | grep -Eo $KNOWN_DISTRO  || grep -Eo $KNOWN_DISTRO /etc/issue 2>/dev/null || uname -s)
 
 echo "$DISTRO"
-
 if [ $DISTRO = "Darwin" ]; then
   DISTRO="Darwin"
 elif [ -f /etc/debian_version -o "$DISTRO" == "Debian" -o "$DISTRO" == "Ubuntu" ]; then
@@ -92,8 +91,30 @@ echo "VV_INSTALL_PATH=$INSTALL_PATH" > vv_setting.sh
   esac
 }
 
+install_vv_mux() {
+  case $DISTRO in
+  Debian)
+    ubuntu_version=$(lsb_release -r)
+    if [[ $ubuntu_version == *"16.04"* ]]; then
+        echo "VVmux is not needed"
+    else
+        sudo apt install -f ./utils/libevent-2.0-5_2.0.21-stable-2_amd64.deb
+        sudo apt install -f ./utils/vvmux.deb
+    fi
+    ;;
+  RedHat)
+      echo "VVmux is not prepared"
+    ;;
+  Darwin)
+      echo "VVmux is not prepared"
+  esac
+}
+
+#Start VVmux install
+
 INSTALL_PATH="$(pwd)/Visual-Vim"
 
+install_vv_mux
 install_script_deps
 
 # Install Tmux
