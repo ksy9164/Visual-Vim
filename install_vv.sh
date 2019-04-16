@@ -114,7 +114,6 @@ install_vv_mux() {
 
 INSTALL_PATH="$(pwd)/Visual-Vim"
 
-install_vv_mux
 install_script_deps
 
 # Install Tmux
@@ -136,6 +135,7 @@ git clone https://github.com/ksy9164/Visual-Vim.git
 cd Visual-Vim
 mkdir session_log
 
+install_vv_mux
 make_vv_script
 
 # profile_file setting
