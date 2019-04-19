@@ -134,6 +134,7 @@ git clone https://github.com/ksy9164/Visual-Vim.git
 # make vv_setting.sh
 cd Visual-Vim
 mkdir session_log
+chmod 664 session_log
 
 install_vv_mux
 make_vv_script
@@ -143,8 +144,8 @@ for PROFILE_FILE in "zshrc" "bashrc" "profile" "bash_profile"
 do
     if [ -e "${HOME}/.${PROFILE_FILE}" ]
     then
-    echo "VV_INSTALL_PATH=$INSTALL_PATH" >> "${HOME}/.${PROFILE_FILE}"
-    echo "if [ -e \"\$VV_INSTALL_PATH/vv_setting.sh\" ]; then source \$VV_INSTALL_PATH/vv_setting.sh;fi" >> "${HOME}/.${PROFILE_FILE}"
+        echo "VV_INSTALL_PATH=$INSTALL_PATH" >> "${HOME}/.${PROFILE_FILE}"
+        echo "if [ -e \"\$VV_INSTALL_PATH/vv_setting.sh\" ]; then source \$VV_INSTALL_PATH/vv_setting.sh;fi" >> "${HOME}/.${PROFILE_FILE}"
     fi
 done
 
@@ -152,13 +153,27 @@ done
 echo "Do you want to use Visual-Vim's vimrc,Vim-PlugIn settings?? (Y/N)"
 read confirm
 if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
-    cp ~/.vimrc ~/.vimrc_past
+    if [ -e "~/.vimrc" ]
+    then
+        cp ~/.vimrc ~/.vimrc_past
+        echo "Your past ~/.vimrc is moved ~/.vimrc_past"
+    fi
     cp $INSTALL_PATH/utils/.vimrc ~
-    install_system_pkg "ctags"
-    install_system_pkg "vim-gnome"
+    case $DISTRO in
+        Debian)
+            install_system_pkg "ctags"
+            install_system_pkg "vim-gnome"
+            ;;
+        RedHat)
+            install_system_pkg "ctags"
+            install_system_pkg "vim-X11"
+            ;;
+        Darwin)
+            install_system_pkg "ctags"
+            install_system_pkg "reattach-to-user-namespace"
+    esac
     git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
     sudo vim -c 'PluginInstall' -c 'qa!'
-    echo "Your past ~/.vimrc is moved ~/.vimrc_past"
 fi
 
 # Tmux settings
