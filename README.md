@@ -9,6 +9,9 @@
 $ wget https://raw.githubusercontent.com/ksy9164/Visual-Vim/master/install_vv.sh  
 $ chmod +x ./install_vv.sh  
 $ ./install_vv.sh  
+
+* When installation is complete, Please restart the terminal.   
+
 ````  
 -----------------------------------------
   
