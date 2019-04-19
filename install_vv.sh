@@ -20,94 +20,90 @@ DISTRO=$(lsb_release -d 2>/dev/null | grep -Eo $KNOWN_DISTRO  || grep -Eo $KNOWN
 
 echo "$DISTRO"
 if [ $DISTRO = "Darwin" ]; then
-  DISTRO="Darwin"
+    DISTRO="Darwin"
 elif [ -f /etc/debian_version -o "$DISTRO" == "Debian" -o "$DISTRO" == "Ubuntu" ]; then
-  DISTRO="Debian"
+    DISTRO="Debian"
 elif [ -f /etc/redhat-release -o "$DISTRO" == "RedHat" -o "$DISTRO" == "CentOS" -o "$DISTRO" == "Amazon" ]; then
-  DISTRO="RedHat"
+    DISTRO="RedHat"
 elif [ -f /etc/system-release -o "$DISTRO" == "Amazon" ]; then
-  DISTRO="RedHat"
+    DISTRO="RedHat"
 else
-  show_error "Sorry, your host OS distribution is not supported by this script."
-  show_info "Please send us a pull request or file an issue to support your environment!"
-  exit 1
+    show_error "Sorry, your host OS distribution is not supported by this script."
+    show_info "Please send us a pull request or file an issue to support your environment!"
+    exit 1
 fi
 
 install_script_deps() {
-  case $DISTRO in
-  Debian)
-    sudo apt-get update
-    sudo apt-get install -y git
-    ;;
-  RedHat)
-    sudo yum clean expire-cache  # next yum invocation will update package metadata cache
-    sudo yum install -y git
-    ;;
-  Darwin)
-    if ! type "brew" >/dev/null 2>&1; then
-      echo "brew is not available!"
-      echo "Sorry, we only support auto-install on macOS using Homebrew. Please install it and try again."
-      exit 1
-    fi
-    brew update
-    # Having Homebrew means that the user already has git.
-    ;;
-  esac
+    case $DISTRO in
+        Debian)
+            sudo apt-get update
+            sudo apt-get install -y git
+            ;;
+        RedHat)
+            sudo yum clean expire-cache  # next yum invocation will update package metadata cache
+            sudo yum install -y git
+            ;;
+        Darwin)
+            if ! type "brew" >/dev/null 2>&1; then
+                echo "brew is not available!"
+                echo "Sorry, we only support auto-install on macOS using Homebrew. Please install it and try again."
+                exit 1
+            fi
+            brew update
+            # Having Homebrew means that the user already has git.
+            ;;
+    esac
 }
 
 install_system_pkg() {
-  # accepts three args: Debian-style name, RedHat-style name, and Homebrew-style name
-  case $DISTRO in
-  Debian)
-    sudo apt-get install -y $1
-    echo "sudo apt-get install -y $1"
-    ;;
-  RedHat)
-    sudo yum install -y $2
-    ;;
-  Darwin)
-    brew bundle --file=- <<EOS
-brew "$3"
-EOS
-  esac
+    case $DISTRO in
+        Debian)
+            sudo apt-get install -y $1
+            ;;
+        RedHat)
+            sudo yum install -y $1
+            ;;
+        Darwin)
+            brew install -y $1
+    esac
 }
 
 make_vv_script() {
-echo "VV_INSTALL_PATH=$INSTALL_PATH" > vv_setting.sh
-  case $DISTRO in
-  Debian)
-    ubuntu_version=$(lsb_release -r)
-    if [[ $ubuntu_version == *"16.04"* ]]; then
-        cat ./src/xenial/vv_func.sh >> vv_setting.sh
-    else
-        cat ./src/bionic/vv_func.sh >> vv_setting.sh
-    fi
-    ;;
-  RedHat)
-        cat ./src/redhat/vv_func.sh >> vv_setting.sh
-    ;;
-  Darwin)
-        cat ./src/darwin/vv_func.sh >> vv_setting.sh
-  esac
+    echo "VV_INSTALL_PATH=$INSTALL_PATH" > vv_setting.sh
+    case $DISTRO in
+        Debian)
+            ubuntu_version=$(lsb_release -r)
+            if [[ $ubuntu_version == *"16.04"* ]]; then
+                cat ./src/xenial/vv_func.sh >> vv_setting.sh
+            else
+                cat ./src/bionic/vv_func.sh >> vv_setting.sh
+            fi
+            ;;
+        RedHat)
+            cat ./src/redhat/vv_func.sh >> vv_setting.sh
+            ;;
+        Darwin)
+            cat ./src/darwin/vv_func.sh >> vv_setting.sh
+    esac
 }
 
 install_vv_mux() {
-  case $DISTRO in
-  Debian)
-    ubuntu_version=$(lsb_release -r)
-    if [[ $ubuntu_version == *"16.04"* ]]; then
-        echo "VVmux is not needed"
-    else
-        sudo apt install -f ./utils/libevent-2.0-5_2.0.21-stable-2_amd64.deb
-        sudo apt install -f ./utils/vvmux.deb
-    fi
-    ;;
-  RedHat)
-      echo "VVmux is not prepared"
-    ;;
-  Darwin)
-      echo "VVmux is not prepared"
-  esac
+    case $DISTRO in
+        Debian)
+            ubuntu_version=$(lsb_release -r)
+            if [[ $ubuntu_version == *"16.04"* ]]; then
+                echo "VVmux is not needed"
+            else
+                sudo apt install -f ./utils/libevent-2.0-5_2.0.21-stable-2_amd64.deb
+                sudo apt install -f ./utils/vvmux.deb
+            fi
+            ;;
+        RedHat)
+            echo "VVmux is not prepared"
+            ;;
+        Darwin)
+            echo "VVmux is not prepared"
+    esac
 }
 
 #Start VVmux install
