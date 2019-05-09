@@ -107,7 +107,6 @@ install_vv_mux() {
 }
 
 #Start VVmux install
-
 INSTALL_PATH="$(pwd)/Visual-Vim"
 
 install_script_deps
@@ -144,6 +143,13 @@ do
         echo "if [ -e \"\$VV_INSTALL_PATH/vv_setting.sh\" ]; then source \$VV_INSTALL_PATH/vv_setting.sh;fi" >> "${HOME}/.${PROFILE_FILE}"
     fi
 done
+
+# Auto session remove
+echo "#!/bin/bash" > visual-vim-init
+echo "rm $INSTALL_PATH/session_log/*" >> visual-vim-init
+chmod +x visual-vim-init
+sudo mv ./visual-vim-init /etc/init.d
+sudo update-rc.d visual-vim-init defaults
 
 # Vim settings
 echo "Do you want to use Visual-Vim's vimrc,Vim-PlugIn settings?? (Y/N)"
