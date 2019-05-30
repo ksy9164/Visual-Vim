@@ -120,7 +120,7 @@ au BufEnter /* call LoadCscope()
 	let Tlist_Inc_Winwidth = 0
 	let Tlist_Exit_OnlyWindow = 1
 	let Tlist_Display_Tag_Scope = 1
-	let Tlist_Auto_Open = 1
+	let Tlist_Auto_Open = 0
 	let Tlist_Use_Right_Window = 1
 
 	nmap <C-H> <C-W>h
@@ -348,4 +348,7 @@ let g:NERDTrimTrailingWhitespace = 1
 " customize keymapping
 map <Leader>cc <plug>NERDComToggleComment
 map <Leader>c<space> <plug>NERDComComment
+
+:nmap <c-s> :w<CR>
+:imap <c-s> <Esc>:w<CR>a
 

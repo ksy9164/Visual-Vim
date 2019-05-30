@@ -83,13 +83,13 @@ vv(){
         # gdb console size
         tmux splitw -v -p 50 -t 0
         tmux splitw -h -p 50 -t 1
-         
+
         tmux send-keys -t 2 "tmux resize-pane -D 13" C-j
         tmux send-keys -t 1 "tmux resize-pane -R 20" C-j
-        
+
         #read rate file
         source $VV_INSTALL_PATH/src/ScreenRate.sh
-        
+
 
         echo "$sc$screen_id ! $@ !" >> $VV_INSTALL_PATH/session_log/$sc.txt
 
@@ -120,6 +120,7 @@ write_id(){
 }
 
 vq(){
+    tmux send-keys -t 0 " :w " C-j
     t_id=$("tty")
     data=$(cat $VV_INSTALL_PATH/session_log/* | grep "$t_id")
     s_id=$(echo "$data" | cut -d "/" -f1)
@@ -131,4 +132,6 @@ vq(){
 vd(){
     tmux detach
 }
+bind -r '\C-s'
+stty -ixon
 

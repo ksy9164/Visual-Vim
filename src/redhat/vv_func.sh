@@ -120,6 +120,7 @@ write_id(){
 }
 
 vq(){
+    tmux send-keys -t 0 " :w " C-j
     t_id=$("tty")
     data=$(cat $VV_INSTALL_PATH/session_log/* | grep "$t_id")
     s_id=$(echo "$data" | cut -d "/" -f1)
@@ -131,4 +132,6 @@ vq(){
 vd(){
     tmux detach
 }
+bind -r '\C-s'
+stty -ixon
 
