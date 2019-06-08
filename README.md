@@ -2,7 +2,9 @@
 
 ### Visaul-Vim is Tmux utility for Vim user who want to use Vim like an IDE !!  
 -----------------------------------------
-<p align="center"><img src="/img/vv_ani-img.gif?raw=true"/></p>
+<p align="center"><img src="/img/vv_ani-img.gif?raw=true"/></p>  
+  
+   
 # How to Install Visual-Vim?  
 
 ````sh    
@@ -13,7 +15,7 @@ $ ./install_vv.sh
 * When installation is complete, Please restart the terminal.   
 
 ````  
------------------------------------------
+-----------------------------------------  
   
 # How to use Visual-Vim?  
 
