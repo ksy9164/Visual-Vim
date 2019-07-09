@@ -352,3 +352,14 @@ map <Leader>c<space> <plug>NERDComComment
 :nmap <c-s> :w<CR>
 :imap <c-s> <Esc>:w<CR>a
 
+set encoding=utf-8
+set fileencodings=utf-8,cp949
+
+if &term =~ '^screen'
+    " tmux will send xterm-style keys when its xterm-keys option is on
+    execute "set <xUp>=\e[1;*A"
+    execute "set <xDown>=\e[1;*B"
+    execute "set <xRight>=\e[1;*C"
+    execute "set <xLeft>=\e[1;*D"
+endif
+
