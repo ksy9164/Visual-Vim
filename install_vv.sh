@@ -129,7 +129,7 @@ git clone https://github.com/ksy9164/Visual-Vim.git
 # make vv_setting.sh
 cd Visual-Vim
 mkdir session_log
-chmod 775 session_log
+chmod 777 session_log
 
 install_vv_mux
 make_vv_script
