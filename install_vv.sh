@@ -71,14 +71,7 @@ install_system_pkg() {
 make_vv_script() {
     echo "VV_INSTALL_PATH=$INSTALL_PATH" > vv_setting.sh
     case $DISTRO in
-        Debian)
-            ubuntu_version=$(lsb_release -r)
-            if [[ $ubuntu_version == *"16.04"* ]]; then
-                cat ./src/xenial/vv_func.sh >> vv_setting.sh
-            else
-                cat ./src/bionic/vv_func.sh >> vv_setting.sh
-            fi
-            ;;
+            cat ./src/ubuntu/vv_func.sh >> vv_setting.sh
         RedHat)
             cat ./src/redhat/vv_func.sh >> vv_setting.sh
             ;;
@@ -91,12 +84,11 @@ install_vv_mux() {
     case $DISTRO in
         Debian)
             ubuntu_version=$(lsb_release -r)
-            if [[ $ubuntu_version == *"16.04"* ]]; then
-                echo "VVmux is not needed"
-            else
-                sudo apt install -f ./utils/libevent-2.0-5_2.0.21-stable-2_amd64.deb
-                sudo apt install -f ./utils/vvmux.deb
-            fi
+            echo "Installing VVmux"
+            cd utils
+            chmod +x ./install_vvmux.sh
+            ./install_vvmux.sh
+            cd ../
             ;;
         RedHat)
             echo "VVmux is not prepared"
@@ -129,7 +121,7 @@ git clone https://github.com/ksy9164/Visual-Vim.git
 # make vv_setting.sh
 cd Visual-Vim
 mkdir session_log
-chmod 777 session_log
+chmod +wr session_log
 
 install_vv_mux
 make_vv_script
@@ -140,16 +132,10 @@ do
     if [ -e "${HOME}/.${PROFILE_FILE}" ]
     then
         echo "VV_INSTALL_PATH=$INSTALL_PATH" >> "${HOME}/.${PROFILE_FILE}"
+        echo "vvmux=$INSTALL_PATH/utils/tmux/tmux" >> "${HOME}/.${PROFILE_FILE}"
         echo "if [ -e \"\$VV_INSTALL_PATH/vv_setting.sh\" ]; then source \$VV_INSTALL_PATH/vv_setting.sh;fi" >> "${HOME}/.${PROFILE_FILE}"
     fi
 done
-
-# Auto session remove
-echo "#!/bin/bash" > visual-vim-init
-echo "rm $INSTALL_PATH/session_log/*" >> visual-vim-init
-chmod +x visual-vim-init
-sudo mv ./visual-vim-init /etc/init.d
-sudo update-rc.d visual-vim-init defaults
 
 # Vim settings
 echo "Do you want to use Visual-Vim's vimrc,Vim-PlugIn settings?? (Y/N)"
