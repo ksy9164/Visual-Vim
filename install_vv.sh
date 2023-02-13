@@ -71,7 +71,9 @@ install_system_pkg() {
 make_vv_script() {
     echo "VV_INSTALL_PATH=$INSTALL_PATH" > vv_setting.sh
     case $DISTRO in
+        Debian)
             cat ./src/ubuntu/vv_func.sh >> vv_setting.sh
+            ;;
         RedHat)
             cat ./src/redhat/vv_func.sh >> vv_setting.sh
             ;;
