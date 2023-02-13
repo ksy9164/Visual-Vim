@@ -153,6 +153,7 @@ if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
         Debian)
             install_system_pkg "ctags"
             install_system_pkg "vim-gnome"
+            install_system_pkg "vim-gui-common"
             ;;
         RedHat)
             install_system_pkg "ctags"
