@@ -163,7 +163,7 @@ if [[ $confirm == [yY] || $confirm == [yY][eE][sS] ]]; then
             install_system_pkg "ctags"
             install_system_pkg "reattach-to-user-namespace"
     esac
-    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+    git clone https://github.com/ksy9164/Vundle.vim.git ~/.vim/bundle/Vundle.vim
     vim -c 'PluginInstall' -c 'qa!'
     sudo vim -c 'PluginInstall' -c 'qa!'
 fi

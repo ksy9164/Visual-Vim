@@ -1,26 +1,26 @@
-set hlsearch " 검색어 하이라이팅
-set nu " 줄번호
-set autoindent " 자동 들여쓰기
+set hlsearch 
+set nu 
+set autoindent 
 set scrolloff=2
 set wildmode=longest,list
 set ts=4 "tag select
 set sts=4 "st select
-set sw=1 " 스크롤바 너비
-set autowrite " 다른 파일로 넘어갈 때 자동 저장
-set autoread " 작업 중인 파일 외부에서 변경됬을 경우 자동으로 불러옴
-set cindent " C언어 자동 들여쓰기
+set sw=1 
+set autowrite 
+set autoread 
+set cindent  
 set bs=eol,start,indent
 set history=256
-set laststatus=2 " 상태바 표시 항상
-set shiftwidth=4 " 자동 들여쓰기 너비 설정
-set showmatch " 일치하는 괄호 하이라이팅
-set smartcase " 검색시 대소문자 구별
+set laststatus=2 
+set shiftwidth=4 
+set showmatch   
+set smartcase   
 set smarttab
 set smartindent
 set expandtab
 set softtabstop=4
 set tabstop=4
-set ruler " 현재 커서 위치 표시
+set ruler 
 set incsearch
 set statusline=\ %<%l:%v\ [%P]%=%a\ %h%m%r\ %F\
 set tags=./tags,/usr/src/linux/tags,/usr/include/tags
@@ -220,14 +220,13 @@ func! CPMan()
 	exe "!man -S 2:3:4:5:6:7:8:9:tc1:n:l:p:o std::".sm
 	endfunc
 	nmap    ,k :call CPMan()<cr>
-	"============== 주석 매크로 ==============
  
-	func! CmtOn()    "주석 on
+	func! CmtOn()    "annotation on
 	exe "'<,'>norm i//"
 	endfunc
  
  
-	func! CmtOff()    "주석 off
+	func! CmtOff()    "annotation off
 	exe "'<,'>norm 2x"
 endfunc
  
@@ -265,7 +264,6 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 
 let g:airline#extensions#tabline#buffer_nr_format = '%s:' " buffer number format
 set hidden
-" 모든 버퍼와 각 버퍼 상태 출력
 nmap <leader>bl :ls<CR>
 let g:airline#extensions#tabline#buffer_nr_show = 1       " buffer number를 보여준다
 
@@ -278,11 +276,8 @@ set rtp+=~/.vim/bundle/Vundle.vim
 
 call vundle#begin()
 " let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
 " vim-airline
 Plugin 'vim-airline/vim-airline'
-"taglist
-Plugin 'taglist-plus'
 "Nerd Tree
 Plugin 'The-NERD-Tree'
 "Cscope
@@ -301,6 +296,8 @@ Plugin 'honza/vim-snippets'
 "Commenter
 Plugin 'scrooloose/nerdcommenter'
 call vundle#end()            " required
+
+
 
 filetype plugin indent on    " required
 
