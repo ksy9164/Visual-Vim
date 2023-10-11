@@ -134,7 +134,7 @@ do
     if [ -e "${HOME}/.${PROFILE_FILE}" ]
     then
         echo "VV_INSTALL_PATH=$INSTALL_PATH" >> "${HOME}/.${PROFILE_FILE}"
-        echo "alias vvmux='$INSTALL_PATH/utils/tmux/tmux'" >> "${HOME}/.${PROFILE_FILE}"
+        echo "alias vvmux='$INSTALL_PATH/utils/tmux-2.1/tmux'" >> "${HOME}/.${PROFILE_FILE}"
         echo "if [ -e \"\$VV_INSTALL_PATH/vv_setting.sh\" ]; then source \$VV_INSTALL_PATH/vv_setting.sh;fi" >> "${HOME}/.${PROFILE_FILE}"
     fi
 done
