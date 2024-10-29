@@ -7,8 +7,9 @@
    
 # How to Install Visual-Vim?  
 
-````sh    
-$ wget https://raw.githubusercontent.com/ksy9164/Visual-Vim/master/install_vv.sh  
+````sh
+$ sudo apt install libevent-dev ncurses-dev build-essential bison pkg-config
+$ wget https://raw.githubusercontent.com/ksy9164/Visual-Vim/master/install_vv.sh
 $ chmod +x ./install_vv.sh  
 $ ./install_vv.sh  
 
